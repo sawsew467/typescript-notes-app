@@ -1,35 +1,22 @@
 import React from "react";
-import { IState as IProps } from ".././App";
+import { useDispatch } from "react-redux";
+import { bindActionCreators } from "redux";
+import { IState as IProps } from "~/App";
+import { actionCreators } from "../redux/index";
 
 interface Iprop {
   info: IProps["post"];
   id: number;
-  postList: IProps["postList"];
-  setPostList: React.Dispatch<React.SetStateAction<IProps["postList"]>>;
 }
 
-function Post({ info, id, setPostList, postList }: Iprop) {
+function Post({ info, id }: Iprop) {
+  const dispath = useDispatch();
+  const { deletePost, starPost } = bindActionCreators(actionCreators, dispath);
   const deleteHandle = (index: number): void => {
-    setPostList(postList.filter((item, id) => id !== index));
+    deletePost(index);
   };
   const starHandle = (index: number) => {
-    setPostList(
-      postList.map((post, id) => {
-        if (id === index) {
-          return post.isStared === false
-            ? {
-                ...post,
-                isStared: true,
-              }
-            : {
-                ...post,
-                isStared: false,
-              };
-        } else {
-          return post;
-        }
-      })
-    );
+    starPost(index);
   };
   return (
     <>

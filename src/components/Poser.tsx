@@ -1,12 +1,12 @@
 import React, { useRef, useState } from "react";
-import { IState as IProps } from ".././App";
+import { useDispatch } from "react-redux";
+import { bindActionCreators } from "redux";
+import { IState as IProps } from "~/App";
+import { actionCreators } from "../redux";
 
-interface IProp {
-  postList: IProps["postList"];
-  setPostList: React.Dispatch<React.SetStateAction<IProps["postList"]>>;
-}
-
-function Poser({ setPostList, postList }: IProp) {
+function Poser() {
+  const dispath = useDispatch();
+  const { addPost } = bindActionCreators(actionCreators, dispath);
   const ref = useRef(null);
   const [post, setPost] = useState<IProps["post"]>({
     title: "",
@@ -26,14 +26,13 @@ function Poser({ setPostList, postList }: IProp) {
     });
   };
   const handleSubmit = () => {
-    // const newPostList:any = postList.push(post);
-    setPostList([post, ...postList]);
+    // setPostList([post, ...postList]);
     setPost({
       title: "",
       content: "",
       isStared: false,
     });
-    // ref.current.focus();
+    addPost(post);
   };
   return (
     <>
